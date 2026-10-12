@@ -1,0 +1,495 @@
+# Code 1: 
+using System;
+
+namespace VehicleHierarchy
+{
+    public class Vehicle
+    {
+        public string Brand { get; set; }
+        public string Model { get; set; }
+        public int Year { get; set; }
+        public Vehicle(string brand, string model, int year)
+        {
+            Brand = brand;
+            Model = model;
+            Year = year;
+        }
+
+        public virtual void DisplayInfo()
+        {
+            Console.WriteLine($"Brand: {Brand}, Model: {Model}, Year: {Year}");
+        }
+    }
+    public class Car : Vehicle
+    {
+        public int NumberOfDoors { get; set; }
+        public Car(string brand, string model, int year, int numberOfDoors) 
+            : base(brand, model, year)
+        {
+            NumberOfDoors = numberOfDoors;
+        }
+
+        public override void DisplayInfo()
+        {
+            base.DisplayInfo();
+            Console.WriteLine($"Number of Doors: {NumberOfDoors}");
+        }
+    }
+
+    public class Motorbike : Vehicle
+    {
+        public bool HasSidecar { get; set; }
+
+        public Motorbike(string brand, string model, int year, bool hasSidecar) 
+            : base(brand, model, year)
+        {
+            HasSidecar = hasSidecar;
+        }
+
+        public override void DisplayInfo()
+        {
+            base.DisplayInfo();
+            Console.WriteLine($"Has Sidecar: {(HasSidecar ? "Yes" : "No")}");
+        }
+    }
+
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Car myCar = new Car("Toyota", "Corolla", 2023, 4);
+            Motorbike myBike = new Motorbike("Honda", "CBR", 2022, false);
+
+            Console.WriteLine("--- Car Info ---");
+            myCar.DisplayInfo();
+
+            Console.WriteLine("\n--- Motorbike Info ---");
+            myBike.DisplayInfo();
+
+            Console.ReadLine();
+        }
+    }
+}
+
+ // Code 1: 
+ 
+
+ # code 1(b):
+ using System;
+
+namespace MultiLevelInheritance
+{
+    public class Device
+    {
+        public virtual void PowerOn()
+        {
+            Console.WriteLine("Device: Generic power-on sequence initiated.");
+        }
+    }
+    public class KitchenAppliance : Device
+    {
+        public override void PowerOn()
+        {
+            base.PowerOn(); // Calls Device.PowerOn()
+            Console.WriteLine("KitchenAppliance: Checking kitchen safety protocols.");
+        }
+    }
+    public class Microwave : KitchenAppliance
+    {
+        public override void PowerOn()
+        {
+            base.PowerOn(); // Calls KitchenAppliance.PowerOn()
+            Console.WriteLine("Microwave: Internal light turned on. Ready to heat.");
+        }
+    }
+
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Microwave myMicrowave = new Microwave();
+
+            Console.WriteLine("--- Powering On Microwave ---");
+            myMicrowave.PowerOn();
+
+            Console.ReadLine();
+        }
+    }
+}
+
+ // code 1(b)
+ 
+ #code 3:
+ using System;
+
+namespace AbstractionTask
+{
+    public abstract class PaymentProcessor
+    {
+        public abstract string ProcessorName { get; }
+
+        public bool ValidateTransaction(double amount)
+        {
+            if (amount <= 0)
+            {
+                Console.WriteLine($"[{ProcessorName}] Validation Failed: Amount must be positive.");
+                return false;
+            }
+            return true;
+        }
+
+        public abstract void ProcessPayment(double amount);
+    }
+
+    public class PayPalProcessor : PaymentProcessor
+    {
+        public override string ProcessorName => "PayPal";
+
+        public override void ProcessPayment(double amount)
+        {
+            if (ValidateTransaction(amount))
+            {
+                Console.WriteLine($"[{ProcessorName}] Processing payment of ${amount} via secure API.");
+            }
+        }
+    }
+
+    public class StripeProcessor : PaymentProcessor
+    {
+        public override string ProcessorName => "Stripe";
+
+        public override void ProcessPayment(double amount)
+        {
+            if (ValidateTransaction(amount))
+            {
+                Console.WriteLine($"[{ProcessorName}] Tokenizing card details and charging ${amount}.");
+            }
+        }
+    }
+
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            PaymentProcessor paypal = new PayPalProcessor();
+            PaymentProcessor stripe = new StripeProcessor();
+
+            Console.WriteLine("--- Testing Valid Amount ---");
+            double validAmount = 150.50;
+            paypal.ProcessPayment(validAmount);
+            stripe.ProcessPayment(validAmount);
+
+            Console.WriteLine("\n--- Testing Invalid Amount ---");
+            double invalidAmount = -25.00;
+            paypal.ProcessPayment(invalidAmount);
+            stripe.ProcessPayment(invalidAmount);
+
+            Console.ReadLine();
+        }
+    }
+}
+
+ // code 3:
+ # code 4(a):
+ using System;
+
+namespace InterfaceTaskPartA
+{
+    public interface IStartable
+    {
+        void StartEngine();
+    }
+
+    public class Car : IStartable
+    {
+        public void StartEngine()
+        {
+            Console.WriteLine("Car: Checking battery... Fuel injection ready... Vroom! Engine started.");
+        }
+    }
+
+    public class Motorbike : IStartable
+    {
+        public void StartEngine()
+        {
+            Console.WriteLine("Motorbike: Kick-start down... Spark plug ignited... Braap! Engine started.");
+        }
+    }
+
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Console.WriteLine("--- Running Part A: Interface Implementation ---");
+
+            IStartable myCar = new Car();
+            IStartable myBike = new Motorbike();
+
+            myCar.StartEngine();
+            myBike.StartEngine();
+
+            Console.ReadLine();
+        }
+    }
+}
+
+ // code 4(a):
+ #code 4(B):
+ using System;
+
+namespace InterfaceTaskPartB
+{
+   
+    public interface IPrintable
+    {
+        void PrintData();
+    }
+
+  
+    public interface IScannable
+    {
+        void ScanData();
+    }
+
+    public class SmartPrinter : IPrintable, IScannable
+    {
+        public void PrintData()
+        {
+            Console.WriteLine("SmartPrinter: High-resolution lasers heating... Printing document layers completed.");
+        }
+
+        public void ScanData()
+        {
+            Console.WriteLine("SmartPrinter: Optical optical reader active... Scanning surface grid to digital copy.");
+        }
+    }
+
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Console.WriteLine("--- Running Part B: Multiple Interfaces ---");
+
+            SmartPrinter advancedOfficePrinter = new SmartPrinter();
+
+            advancedOfficePrinter.PrintData();
+            advancedOfficePrinter.ScanData();
+
+            Console.ReadLine();
+        }
+    }
+}
+
+ // code 4(b):
+
+ #code 5:
+ using System;
+using System.Collections.Generic;
+
+namespace CompanyPayrollSystem
+{
+    public interface IBonusEligible
+    {
+        double CalculateBonus();
+    }
+
+    public abstract class Employee
+    {
+        private string _name;
+        private int _employeeId;
+
+        public string Name
+        {
+            get => _name;
+            set => _name = value;
+        }
+
+        public int EmployeeId
+        {
+            get => _employeeId;
+            set
+            {
+                if (value <= 0)
+                    throw new ArgumentException("Employee ID must be a positive integer.");
+                _employeeId = value;
+            }
+        }
+
+        protected Employee(string name, int employeeId)
+        {
+            Name = name;
+            EmployeeId = employeeId;
+        }
+
+        public abstract double CalculatePay();
+    }
+
+    public class FullTimeEmployee : Employee, IBonusEligible
+    {
+        private double _monthlySalary;
+
+        public double MonthlySalary
+        {
+            get => _monthlySalary;
+            set
+            {
+                if (value < 0)
+                    throw new ArgumentException("Monthly salary cannot be negative.");
+                _monthlySalary = value;
+            }
+        }
+
+        public FullTimeEmployee(string name, int employeeId, double monthlySalary)
+            : base(name, employeeId)
+        {
+            MonthlySalary = monthlySalary;
+        }
+
+        public override double CalculatePay()
+        {
+            return MonthlySalary;
+        }
+
+        public double CalculateBonus()
+        {
+            return MonthlySalary * 0.10;
+        }
+    }
+
+    public class PartTimeEmployee : Employee
+    {
+        private double _hourlyRate;
+        private double _hoursWorked;
+
+        public double HourlyRate
+        {
+            get => _hourlyRate;
+            set
+            {
+                if (value < 0)
+                    throw new ArgumentException("Hourly rate cannot be negative.");
+                _hourlyRate = value;
+            }
+        }
+
+        public double HoursWorked
+        {
+            get => _hoursWorked;
+            set
+            {
+                if (value < 0)
+                    throw new ArgumentException("Hours worked cannot be negative.");
+                _hoursWorked = value;
+            }
+        }
+
+        public PartTimeEmployee(string name, int employeeId, double hourlyRate, double hoursWorked)
+            : base(name, employeeId)
+        {
+            HourlyRate = hourlyRate;
+            HoursWorked = hoursWorked;
+        }
+
+        public override double CalculatePay()
+        {
+            return HourlyRate * HoursWorked;
+        }
+    }
+
+    public class Manager : Employee, IBonusEligible
+    {
+        private double _baseSalary;
+        private double _allowance;
+
+        public double BaseSalary
+        {
+            get => _baseSalary;
+            set
+            {
+                if (value < 0)
+                    throw new ArgumentException("Base salary cannot be negative.");
+                _baseSalary = value;
+            }
+        }
+
+        public double Allowance
+        {
+            get => _allowance;
+            set
+            {
+                if (value < 0)
+                    throw new ArgumentException("Allowance cannot be negative.");
+                _allowance = value;
+            }
+        }
+
+        public Manager(string name, int employeeId, double baseSalary, double allowance)
+            : base(name, employeeId)
+        {
+            BaseSalary = baseSalary;
+            Allowance = allowance;
+        }
+
+        public override double CalculatePay()
+        {
+            return BaseSalary + Allowance;
+        }
+
+        public double CalculateBonus()
+        {
+            return BaseSalary * 0.15 + 2000;
+        }
+    }
+
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            try
+            {
+                List<Employee> employees = new List<Employee>
+                {
+                    new FullTimeEmployee("Ayesha", 1, 80000),
+                    new PartTimeEmployee("Bilal", 2, 300, 80),
+                    new Manager("Sara", 3, 100000, 20000),
+                    new FullTimeEmployee("Zain", 4, 75000),
+                    new PartTimeEmployee("Hana", 5, 350, 60)
+                };
+
+                double totalPayroll = 0;
+
+                Console.WriteLine("--- Employee Payroll Report ---\n");
+
+                foreach (var emp in employees)
+                {
+                    double pay = emp.CalculatePay();
+                    double bonus = 0;
+                    double totalEmpCost = pay;
+
+                    string output = $"{emp.Name,-8} | {emp.GetType().Name,-17} | Pay: Rs. {pay:F0}";
+
+                    if (emp is IBonusEligible bonusEmp)
+                    {
+                        bonus = bonusEmp.CalculateBonus();
+                        totalEmpCost += bonus;
+                        output += $" | Bonus: Rs. {bonus:F0}";
+                    }
+
+                    Console.WriteLine(output);
+                    totalPayroll += totalEmpCost;
+                }
+
+                Console.WriteLine(new string('-', 60));
+                Console.WriteLine($"Total payroll: Rs. {totalPayroll:F0}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+            }
+
+            Console.ReadLine();
+        }
+    }
+}
+
+ // code 5:
